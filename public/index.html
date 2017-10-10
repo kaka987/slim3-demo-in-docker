@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Slim 3</title>
+    <link href='//fonts.googleapis.com/css?family=Lato:300' rel='stylesheet' type='text/css'>
+    <link href="/static/css/bootstrap3.3.7/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <style>
+        body {
+            margin: 50px 0 0 0;
+            padding: 0;
+            width: 100%;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            text-align: center;
+            color: #aaa;
+            font-size: 18px;
+        }
+
+        h1 {
+            color: #719e40;
+            letter-spacing: -3px;
+            font-family: 'Lato', sans-serif;
+            font-size: 100px;
+            font-weight: 200;
+            margin-bottom: 0;
+        }
+        .user-info {
+            width: 60%;
+            margin: 0 auto;
+        }
+        .tip {
+            color:red;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<h1>Slim</h1>
+<div>a microframework for PHP</div>
+
+<div class="user-info">
+    <div class="tip"></div>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+            <div class="col-sm-10">
+                <input type="email" name="email" class="form-control" id="inputEmail3" placeholder="Email">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="exampleInputUsername1" class="col-sm-2 control-label">Name</label>
+            <div class="col-sm-10">
+                <input type="text" name="name" class="form-control" id="exampleInputUsername1" placeholder="Name">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="exampleInputAge1" class="col-sm-2 control-label">age</label>
+            <div class="col-sm-10">
+                <input type="text" name="age" class="form-control" id="exampleInputAge1" placeholder="age">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1" class="col-sm-2 control-label">password</label>
+            <div class="col-sm-10">
+                <input type="text" name="password" class="form-control" id="exampleInputPassword1" placeholder="password">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="exampleInputDesc1" class="col-sm-2 control-label">Description</label>
+            <div class="col-sm-10">
+                <textarea name="description" id="exampleInputDesc1" class="form-control" rows="3"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="button" id="add-user" class="btn btn-default">Submit</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="/static/js/jquery-2.2.4.min.js"></script>
+<script src="/static/js/bootstrap3.3.7/bootstrap.min.js"></script>
+<script>
+    (function(){
+        $("#add-user").click(function(){
+            $.ajax({
+                url: "/app/users/v1",
+                data: $(".user-info input,.user-info textarea"),
+                dataType: "json",
+                type: "post",
+                success: function( result ) {
+                    $( ".tip" ).html( "<strong>" + result.msg + "</strong>").show();
+                }
+            });
+        });
+    })();
+</script>
+</body>
+</html>

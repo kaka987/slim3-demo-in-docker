@@ -1,0 +1,18 @@
+version: '2'
+
+volumes:
+    logs:
+        driver: local
+
+services:
+    slim:
+        #image: php:7-alpine
+        build: ./
+        working_dir: /var/www
+        command: php -S 0.0.0.0:8888 -t public public/index.php
+        environment:
+            docker: "true"
+        ports:
+            - 8888:8888
+        volumes:
+            - .:/var/www

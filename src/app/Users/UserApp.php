@@ -8,42 +8,28 @@
 
 namespace App\Users;
 
+use App\Libs\Config;
 use App\Users\Models\UserModel;
 
 class UserApp
 {
+    private $db = null;
+    public function __construct(){}
 
-    public $config = [];
-    public $pdo = null;
-    public $logger = null;
-
-    public function __construct($config)
+    public function getDB()
     {
-        $this->config = $config;
-    }
-
-    public function getPDO()
-    {
-        if ($this->pdo != null) {
-            return $this->pdo;
-        } else {
-            $db = $this->config['db'];
-            $pdo = new \PDO("mysql:host=" . $db['host'] . ";dbname=" . $db['dbname'], $db['user'], $db['pass']);
-            $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-            $pdo->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
-            return $this->pdo = $pdo;
+        if ($this->db === null) {
+            $db = null;
+            try {
+                $this->db = Config::getInstance('db')->getDB();
+            } catch (\Exception $e) {}
         }
-    }
-
-    public function getLogger()
-    {
-        return ($this->logger != null) ? $this->logger : ($this->logger = $this->config['logger']);
+        return $this->db;
     }
 
     public function addUser($args)
     {
-        $pdo = $this->getPDO();
-        $model = new UserModel($pdo);
+        $model = new UserModel($this->getDB());
         $args['name'] = filter_var($args['name'], FILTER_SANITIZE_STRING);
         $args['email'] = filter_var($args['email'], FILTER_SANITIZE_EMAIL);
         $args['age'] = filter_var($args['age'], FILTER_SANITIZE_STRING);
@@ -54,8 +40,7 @@ class UserApp
 
     public function getUsers()
     {
-        $pdo = $this->getPDO();
-        $model = new UserModel($pdo);
+        $model = new UserModel($this->getDB());
         return $model->getUsers();
     }
 }

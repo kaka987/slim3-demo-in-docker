@@ -22,3 +22,10 @@ $container['userApp'] = function ($c) {
     $settings = $c->get('settings');
     return new App\Users\UserApp($settings);
 };
+
+$container['db'] = function () {
+    return new \App\Libs\MysqlPdo();
+};
+
+App\Libs\Config::setInstance('container', $container);
+App\Libs\Config::setSettings('settings', $settings['settings']);
